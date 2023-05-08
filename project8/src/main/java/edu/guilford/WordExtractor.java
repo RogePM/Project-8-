@@ -15,8 +15,8 @@ import java.util.Scanner;
  */
 public class WordExtractor {
     public static void main(String[] args) {
-        String inputFilePath = "C:\\Users\\rogel\\OneDrive\\Documents\\project8\\src\\resources\\Richard.txt";
-        String outputFilePath = "C:\\Users\\rogel\\OneDrive\\Documents\\project8\\src\\resources\\RichardWordList.txt";
+        String inputFilePath = "src\\resources\\Poe.txt";
+        String outputFilePath = "src\\resources\\PoeWordList.txt";
 
         // Create a linked list to store the words
         LinkedList<String> words = new LinkedList<>();
