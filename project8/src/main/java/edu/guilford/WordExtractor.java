@@ -4,7 +4,13 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -14,16 +20,20 @@ import java.util.Scanner;
  *
  */
 public class WordExtractor {
-    public static void main(String[] args) {
-        String inputFilePath = "src\\resources\\Poe.txt";
-        String outputFilePath = "src\\resources\\PoeWordList.txt";
+    public static void main(String[] args) throws URISyntaxException {
+         String inputFilePath = "/resources/Poe.txt";
+        String outputFilePath = "/resources/PoeWordList.txt";
 
         // Create a linked list to store the words
         LinkedList<String> words = new LinkedList<>();
 
         try {
             // Open the input file
-            BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(WordExtractor.class.getResourceAsStream(inputFilePath)));
+            //URI uri = WordExtractor.class.getResource(inputFilePath).toURI();
+            //Path path = Paths.get(uri);
+            //BufferedReader reader = Files.newBufferedReader(path);
+
 
             // Read each line of the file
             String line;
@@ -60,8 +70,10 @@ public class WordExtractor {
             Collections.sort(words);
 
             // Open the output file
-            PrintWriter writer = new PrintWriter(new FileWriter(outputFilePath));
-
+            URI outUri = WordExtractor.class.getResource(outputFilePath).toURI();
+            Path outPath = Paths.get(outUri);
+            PrintWriter writer = new PrintWriter(Files.newBufferedWriter(outPath));
+            
             // Write each word to the output file
             for (Word word : wordList) {
                 writer.println(word.toString());
