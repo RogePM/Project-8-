@@ -1,12 +1,12 @@
 package edu.guilford;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -21,19 +21,16 @@ import java.util.Scanner;
  */
 public class WordExtractor {
     public static void main(String[] args) throws URISyntaxException {
-         String inputFilePath = "/resources/Poe.txt";
-        String outputFilePath = "/resources/PoeWordList.txt";
+        String inputFilePath = "src/main/resources/Poe.txt";
+        String outputFilePath = "src/main/resources/PoeWords.txt";
 
         // Create a linked list to store the words
         LinkedList<String> words = new LinkedList<>();
 
         try {
             // Open the input file
-            BufferedReader reader = new BufferedReader(new InputStreamReader(WordExtractor.class.getResourceAsStream(inputFilePath)));
-            //URI uri = WordExtractor.class.getResource(inputFilePath).toURI();
-            //Path path = Paths.get(uri);
-            //BufferedReader reader = Files.newBufferedReader(path);
-
+            File inputFile = new File(inputFilePath);
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 
             // Read each line of the file
             String line;
@@ -70,10 +67,10 @@ public class WordExtractor {
             Collections.sort(words);
 
             // Open the output file
-            URI outUri = WordExtractor.class.getResource(outputFilePath).toURI();
-            Path outPath = Paths.get(outUri);
-            PrintWriter writer = new PrintWriter(Files.newBufferedWriter(outPath));
-            
+
+            File outputFile = new File(outputFilePath);
+            PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(outputFile)));
+
             // Write each word to the output file
             for (Word word : wordList) {
                 writer.println(word.toString());
@@ -89,12 +86,10 @@ public class WordExtractor {
             System.out.print("Enter a word to count: ");
             String wordToCount = scanner.nextLine().toLowerCase();
             scanner.close();
-            
+
             int count = countOccurrences(inputFilePath, wordToCount);
             System.out.println("The word \"" + wordToCount + "\" appears " + count + " times in the text file.");
 
-
-            
         } catch (IOException e) {
             System.err.println("Error: " + e.getMessage());
         }
@@ -111,7 +106,8 @@ public class WordExtractor {
 
     // Helper method to count the number of occurrences of a word in the input file
     private static int countOccurrences(String inputFilePath, String word) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(inputFilePath));
+        Path inputFile = Paths.get(inputFilePath);
+        BufferedReader reader = Files.newBufferedReader(inputFile);
         int count = 0;
         String line;
         while ((line = reader.readLine()) != null) {
